@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import Chat from './components/Chat';
+import Preview from './components/Preview';
+import OpenAI from 'openai';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [code, setCode] = useState('<div>Welcome to the live preview</div>');
+  const [selectedElement, setSelectedElement] = useState<string | null>(null);
+  const openai = new OpenAI({
+    apiKey: process.env['OPENAI_API_KEY'], // This is the default and can be omitted
+  });
+
+  const handleSend = async (message: string) => {
+    let prompt = `Generate React.js code for: ${message}`;
+    if (selectedElement) {
+      prompt = `Update the following element (${selectedElement}) based on this description: ${message}. Original code: ${code}`;
+    }
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
+      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-3.5-turbo',
+    };
+    const response: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);
+
+    const generatedCode = response.data.choices[0].text.trim();
+    setCode(generatedCode);
+    setSelectedElement(null);  // Clear the selection after updating the code
+  };
+
+  const handleElementSelect = (selector: string) => {
+    setSelectedElement(selector);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="flex h-screen">
+      <div className="w-1/2 border-r">
+        <Chat onSend={handleSend} selectedElement={selectedElement} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="w-1/2">
+        <Preview code={code} onElementSelect={handleElementSelect} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
