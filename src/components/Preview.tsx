@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface PreviewProps {
-  code: string;
+  code: string | undefined;
   onElementSelect: (selector: string) => void;
 }
 
