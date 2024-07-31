@@ -1,47 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface PreviewProps {
-  code: string | undefined;
+  code: string;
   onElementSelect: (selector: string) => void;
 }
 
 const Preview: React.FC<PreviewProps> = ({ code, onElementSelect }) => {
-  // const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(null);
-
-  const handleElementClick:{ (event: MouseEvent): void } = (event: MouseEvent) => {
-    event.preventDefault();
-    const element = event.target as HTMLElement;
-    // setSelectedElement(element);
-    const selector = getSelector(element);
-    onElementSelect(selector);
-  };
-
-  const getSelector = (element: HTMLElement): string => {
-    let selector = element.tagName.toLowerCase();
-    if (element.id) {
-      selector += `#${element.id}`;
+  useEffect(() => {
+    // Render the code within a sandboxed environment
+    const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
+    if (iframe) {
+      iframe.contentWindow?.document.open();
+      iframe.contentWindow?.document.write(code);
+      iframe.contentWindow?.document.close();
     }
-    if (element.className) {
-      selector += `.${element.className.split(' ').join('.')}`;
-    }
-    return selector;
-  };
+  }, [code]);
 
   return (
-    <div className="p-4">
-      <div>Live Preview (Click to select elements)</div>
-      <iframe
-        srcDoc={code}
-        title="preview"
-        className="w-full h-full border"
-        onLoad={(e) => {
-          const iframe = e.target as HTMLIFrameElement;
-          const doc = iframe.contentDocument || iframe.contentWindow?.document;
-          if (doc) {
-            doc.body.addEventListener('click', handleElementClick);
-          }
-        }}
-      />
+    <div className="w-full h-full">
+      <iframe id="preview-frame" className="w-full h-full border-0"></iframe>
     </div>
   );
 };
