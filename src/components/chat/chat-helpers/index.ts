@@ -84,7 +84,7 @@ export const handleHostedChat = async (
   const requestBody = {
     messages: formattedMessages,
     model: payload.chatSettings.model,
-    temperature: .payloadchatSettings.temperature,
+    temperature: payload.chatSettings.temperature,
     max_tokens: 4096,
     stream: true
   }
@@ -119,7 +119,7 @@ export const fetchChatResponse = async (
 ) => {
   const myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
-  myHeaders.append("Authorization", `Bearer sk-6LUkjmvs8yKESDeS705e05427793470b8e9cE55bD01006F1`);
+  myHeaders.append("Authorization", `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`);
   myHeaders.append("User-Agent", "Apifox/1.0.0 (https://apifox.com)");
   myHeaders.append("Content-Type", "application/json");
 
