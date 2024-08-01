@@ -13,7 +13,8 @@ interface TextareaAutosizeProps {
   onKeyDown?: (event: React.KeyboardEvent) => void
   onPaste?: (event: React.ClipboardEvent) => void
   onCompositionStart?: (event: React.CompositionEvent) => void
-  onCompositionEnd?: (event: React.CompositionEvent) => void
+  onCompositionEnd?: (event: React.CompositionEvent) => void,
+  onValueChange: (value: string) => void
 }
 
 export const TextareaAutosize: FC<TextareaAutosizeProps> = ({
@@ -24,10 +25,12 @@ export const TextareaAutosize: FC<TextareaAutosizeProps> = ({
   minRows = 1,
   maxRows = 6,
   maxLength,
+
   onKeyDown = () => {},
   onPaste = () => {},
   onCompositionStart = () => {},
-  onCompositionEnd = () => {}
+  onCompositionEnd = () => {},
+  onValueChange = () => {},
 }) => {
   return (
     <ReactTextareaAutosize
@@ -43,6 +46,7 @@ export const TextareaAutosize: FC<TextareaAutosizeProps> = ({
       maxLength={maxLength}
       onKeyDown={onKeyDown}
       onPaste={onPaste}
+      onChange={event => onValueChange(event.target.value)}
       onCompositionStart={onCompositionStart}
       onCompositionEnd={onCompositionEnd}
     />

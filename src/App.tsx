@@ -2,8 +2,19 @@ import React, { useState } from 'react';
 import Chat from './components/Chat';
 import Preview from './components/Preview';
 import { Toaster } from 'sonner';
+import { ChatbotUIContext } from "@/context";
+import { useContext } from 'react';
 
 const App: React.FC = () => {
+  // const { setChatSettings, chatSettings } = useContext(ChatbotUIContext);
+  // setChatSettings({
+  //   model: 'gpt-3.5-turbo',
+  //   prompt: 'You are a friendly, helpful AI assistant. You can use React and Vue and generate full code for users when they want to create a web page',
+  //   temperature: 0.5,
+  //   contextLength: 1024,
+  //   embeddingsProvider: "openai"
+  // })
+  // console.log('chatSettings', chatSettings)
   const [code, setCode] = useState<string>('<div>Welcome to the live preview</div>');
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [chatHistory, setChatHistory] = useState<string[]>([]);
@@ -107,7 +118,7 @@ const App: React.FC = () => {
     <div className="flex h-screen w-screen">
       <Toaster />
       <div className="w-1/2 border-r h-full">
-        <Chat onSend={handleSend} selectedElement={selectedElement} chatHistory={chatHistory} code={code} />
+        <Chat />
       </div>
       <div className="w-1/2 h-full">
         <Preview code={code} onElementSelect={handleElementSelect} />

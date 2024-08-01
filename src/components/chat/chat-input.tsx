@@ -38,7 +38,7 @@ const ChatInput: React.FC = () => {
       setUserInput("");
       setIsGenerating(true);
       abortController = new AbortController();
-
+      debugger;
       validateChatSettings(messageContent);
       const { tempUserChatMessage, tempAssistantChatMessage } =
         createTempMessages(
@@ -53,7 +53,8 @@ const ChatInput: React.FC = () => {
           ? [...chatMessages]
           : [...chatMessages, tempUserChatMessage],
       };
-
+      console.log("payload", payload);
+      debugger
       const generatedText = await handleHostedChat(
         payload,
         tempAssistantChatMessage,
@@ -65,6 +66,7 @@ const ChatInput: React.FC = () => {
       console.log("generatedText", generatedText);
       setIsGenerating(false)
     } catch (error) {
+      console.error(error);
       setIsGenerating(false);
       setUserInput(startInput);
     }
@@ -77,6 +79,7 @@ const ChatInput: React.FC = () => {
         value={userInput}
         minRows={1}
         maxRows={18}
+        onValueChange={setUserInput}
         onKeyDown={handleKeyDown}
         onCompositionStart={() => setIsTyping(true)}
         onCompositionEnd={() => setIsTyping(false)}
