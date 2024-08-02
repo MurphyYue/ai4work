@@ -38,7 +38,6 @@ const ChatInput: React.FC = () => {
       setUserInput("");
       setIsGenerating(true);
       abortController = new AbortController();
-      debugger;
       validateChatSettings(messageContent);
       const { tempUserChatMessage, tempAssistantChatMessage } =
         createTempMessages(
@@ -54,7 +53,6 @@ const ChatInput: React.FC = () => {
           : [...chatMessages, tempUserChatMessage],
       };
       console.log("payload", payload);
-      debugger
       const generatedText = await handleHostedChat(
         payload,
         tempAssistantChatMessage,

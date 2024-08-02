@@ -9,7 +9,7 @@ interface GlobalStateProps {
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessageContent[]>([])
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
-    model: "gpt-4-turbo-preview",
+    model: "gpt-3.5-turbo",
     prompt: "You are a helpful AI assistant.",
     temperature: 0.5,
     contextLength: 4000,
