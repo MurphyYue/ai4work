@@ -12,15 +12,17 @@ import {
   IconMoodSmile,
   IconPencil,
 } from "@tabler/icons-react";
-import { md } from "./message-markdown";
+import Markdown from 'react-markdown'
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import {dark} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { MessageMarkdown } from "./message-markdown"
 
 interface MessageProps {
   message: ChatMessage;
   isLast: boolean;
 }
 
-const Message: React.FC<MessageProps> = ({ message, isLast }) => {
-  const { chatMessages } = useContext(ChatbotUIContext);
+const Message: React.FC<MessageProps> = ({ message }) => {
   return (
     <div
       className={cn(
@@ -47,8 +49,7 @@ const Message: React.FC<MessageProps> = ({ message, isLast }) => {
               />
             </div>
           )}
-          {md.render(message.content)}
-          {/* <MessageMarkdown content={message.content} /> */}
+          <MessageMarkdown content={message.content} />
         </div>
       </div>
     </div>

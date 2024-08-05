@@ -57,7 +57,7 @@ export const createTempMessages = (
       tempAssistantChatMessage
     ]
   }
-
+  console.log('newMessages', newMessages)
   setChatMessages(newMessages)
 
   return {
@@ -97,7 +97,6 @@ export const handleHostedChat = async (
     setIsGenerating,
     setChatMessages
   )
-
   return await processResponse(
     response,
     isRegeneration
@@ -129,7 +128,6 @@ export const fetchChatResponse = async (
     body: JSON.stringify(body)
   };
   const response = await fetch(url, requestOptions)
-
   if (!response.ok) {
     if (response.status === 404 && !isHosted) {
       toast.error(
@@ -164,27 +162,37 @@ export const processResponse = async (
       chunk => {
 
         try {
-          contentToAdd = isHosted
-            ? chunk
-            : // Ollama's streaming endpoint returns new-line separated JSON
-              // objects. A chunk may have more than one of these objects, so we
-              // need to split the chunk by new-lines and handle each one
-              // separately.
-              chunk
-                .trimEnd()
-                .split("\n")
-                .reduce(
-                  (acc, line) => acc + JSON.parse(line).message.content,
-                  ""
-                )
-          fullText += contentToAdd
+          contentToAdd = chunk
+          // console.log('isHosted',isHosted)
+          // console.log('contentToAdd',contentToAdd)
+          // fullText += contentToAdd
+          const lines = contentToAdd.split("data: ");
+          const parsedLines = lines
+          .filter((line) => line !== "" && !line.includes('[DONE]')) // Remove empty lines and "[DONE]"
+          .map((line) => {
+            try {
+              return JSON.parse(line);
+            } catch (e) {
+              return null;
+            }
+          })
+          .filter(Boolean); // Parse the JSON string
+          for (const parsedLine of parsedLines) {
+            const { choices } = parsedLine;
+            const { delta } = choices[0];
+            const { content } = delta;
+            if (content) {
+              fullText += content
+            }
+          }
         } catch (error) {
           console.error("Error parsing JSON:", error)
         }
-
         setChatMessages(prev =>
           prev.map(chatMessage => {
+            // console.log('chatMessage', chatMessage);
             if (chatMessage.message.id === lastChatMessage.message.id) {
+              // console.log('fullText', fullText);
               const updatedChatMessage: ChatMessageContent = {
                 message: {
                   ...chatMessage.message,

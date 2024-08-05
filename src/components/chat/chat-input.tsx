@@ -61,6 +61,7 @@ const ChatInput: React.FC = () => {
         setIsGenerating,
         setChatMessages
       );
+      
       console.log("generatedText", generatedText);
       setIsGenerating(false)
     } catch (error) {
@@ -72,8 +73,8 @@ const ChatInput: React.FC = () => {
   return (
     <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">
       <TextareaAutosize
-        className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-        placeholder={"ask me anything"}
+        className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent pr-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        placeholder={"let's design an alsome web page"}
         value={userInput}
         minRows={1}
         maxRows={18}

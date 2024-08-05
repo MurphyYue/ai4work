@@ -7,7 +7,6 @@ interface ChatMessagesProps {}
 
 export const ChatMessages: FC<ChatMessagesProps> = ({}) => {
   const { chatMessages } = useContext(ChatbotUIContext);
-
   return chatMessages
     .sort((a, b) => a.message.sequence_number - b.message.sequence_number)
     .map((chatMessage, index, array) => {
