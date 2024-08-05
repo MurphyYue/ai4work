@@ -1,21 +1,9 @@
 import React from "react";
 import { ChatMessage } from "@/types/chat-message";
-import { ChatbotUIContext } from "@/context";
-import { useContext } from "react";
 import { cn } from "@/lib/utils";
-import {
-  IconBolt,
-  IconCaretDownFilled,
-  IconCaretRightFilled,
-  IconCircleFilled,
-  IconFileText,
-  IconMoodSmile,
-  IconPencil,
-} from "@tabler/icons-react";
-import Markdown from 'react-markdown'
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
-import {dark} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { IconMoodSmile } from "@tabler/icons-react";
 import { MessageMarkdown } from "./message-markdown"
+import { OpenAISVG } from "@/assets/openai-svg"
 
 interface MessageProps {
   message: ChatMessage;
@@ -32,21 +20,20 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     >
       <div className="relative flex w-full flex-col p-6">
         <div className="space-y-3">
-          {message.role === "system" ? (
+          {message.role === "assistant" ? (
             <div className="flex items-center space-x-4">
-              <IconPencil
+              <OpenAISVG
                 className="border-primary bg-primary text-secondary rounded border-DEFAULT p-1"
-                size={24}
               />
-
-              <div className="text-lg font-semibold">Prompt</div>
+              <div className="text-lg font-semibold">chatbot</div>
             </div>
           ) : (
             <div className="flex items-center space-x-3">
               <IconMoodSmile
                 className="bg-primary text-secondary border-primary rounded border-DEFAULT p-1"
-                size={24}
+                size={48}
               />
+              <div className="text-lg font-semibold">user</div>
             </div>
           )}
           <MessageMarkdown content={message.content} />

@@ -1,6 +1,5 @@
 import { ChatbotUIContext } from "@/context"
-import { ChatMessage } from "@/types/chat-message"
-import { FC, useContext, useState } from "react"
+import { FC, useContext } from "react"
 import Message from "@/components/messages/message"
 
 interface ChatMessagesProps {}
