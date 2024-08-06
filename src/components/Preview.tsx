@@ -1,24 +1,32 @@
-import React, { useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { transform } from '@babel/standalone';
 interface PreviewProps {
   code: string;
   onElementSelect: (selector: string) => void;
 }
 
 const Preview: React.FC<PreviewProps> = ({ code, onElementSelect }) => {
+  const [jsxElement, setJsxElement] = useState<React.ReactElement | null>(null);
+
   useEffect(() => {
-    // Render the code within a sandboxed environment
-    const iframe = document.getElementById('preview-frame') as HTMLIFrameElement;
-    if (iframe) {
-      iframe.contentWindow?.document.open();
-      iframe.contentWindow?.document.write(code);
-      iframe.contentWindow?.document.close();
+    try {
+      const transformedCode = transform(code, {
+        presets: ['react', 'es2015'],
+      }).code;
+      // replace "use strict"; with empty string
+      const newstr = transformedCode?.replace(/"use strict";/g, '');
+      const Component = new Function('React', 'useState', `${newstr}; return Page;`)(React, React.useState);
+      console.log(Component)
+      setJsxElement(<Component />);
+    } catch (error) {
+      console.error('Error transforming code:', error);
+      setJsxElement(<div>Error rendering component</div>);
     }
   }, [code]);
 
   return (
     <div className="w-full h-full">
-      <iframe id="preview-frame" className="w-full h-full border-0"></iframe>
+      {jsxElement}
     </div>
   );
 };

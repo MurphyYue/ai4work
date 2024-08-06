@@ -190,6 +190,11 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@babel/standalone@^7.25.3":
+  version "7.25.3"
+  resolved "https://registry.yarnpkg.com/@babel/standalone/-/standalone-7.25.3.tgz#da5eaa9e0b0c2da360fe033eb580400739b03bb9"
+  integrity sha512-uR+EoBqIIIvKGCG7fOj7HKupu3zVObiMfdEwoPZfVCPpcWJaZ1PkshaP5/6cl6BKAm1Zcv25O1rf+uoQ7V8nqA==
+
 "@babel/template@^7.24.7":
   version "7.24.7"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.24.7.tgz#02efcee317d0609d2c07117cb70ef8fb17ab7315"
@@ -552,7 +557,7 @@
   resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-3.11.0.tgz#63dde1cd024f0652ab08ff2589d2b26070594cfa"
   integrity sha512-/vZinJNvCYhdAB+RUsyCpanSPuOEKHHIZi4Uu0Bw7ilewHnQhCWUPrT704uHCRli2ROl7spADPmWzAqOganA5A==
 
-"@types/babel__core@^7.20.5":
+"@types/babel__core@^7.1.0", "@types/babel__core@^7.20.5":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz#3df15f27ba85319caa07ba08d0721889bb39c017"
   integrity sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==
@@ -569,6 +574,13 @@
   integrity sha512-ASsj+tpEDsEiFr1arWrlN6V3mdfjRMZt6LtK/Vp/kreFLnr5QH5+DhvD5nINYZXzwJvXeGq+05iUXcAzVrqWtw==
   dependencies:
     "@babel/types" "^7.0.0"
+
+"@types/babel__standalone@^7.1.7":
+  version "7.1.7"
+  resolved "https://registry.yarnpkg.com/@types/babel__standalone/-/babel__standalone-7.1.7.tgz#8ab09548a24f54015e7d84a55486148180bc4ace"
+  integrity sha512-4RUJX9nWrP/emaZDzxo/+RYW8zzLJTXWJyp2k78HufG459HCz754hhmSymt3VFOU6/Wy+IZqfPvToHfLuGOr7w==
+  dependencies:
+    "@types/babel__core" "^7.1.0"
 
 "@types/babel__template@*":
   version "7.4.4"
