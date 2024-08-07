@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { transform } from '@babel/standalone';
-interface PreviewProps {
-  code: string;
-  onElementSelect: (selector: string) => void;
-}
+import { ChatbotUIContext } from '@/context';
+import { useContext } from 'react';
 
-const Preview: React.FC<PreviewProps> = ({ code, onElementSelect }) => {
+interface PreviewProps {}
+
+const Preview: React.FC<PreviewProps> = ({}) => {
   const [jsxElement, setJsxElement] = useState<React.ReactElement | null>(null);
-
+  const { runningCode } = useContext(ChatbotUIContext);
   useEffect(() => {
     try {
-      const transformedCode = transform(code, {
+      const transformedCode = transform(runningCode, {
         presets: ['react', 'es2015'],
       }).code;
       // replace "use strict"; with empty string
@@ -22,7 +22,7 @@ const Preview: React.FC<PreviewProps> = ({ code, onElementSelect }) => {
       console.error('Error transforming code:', error);
       setJsxElement(<div>Error rendering component</div>);
     }
-  }, [code]);
+  }, [runningCode]);
 
   return (
     <div className="w-full h-full">

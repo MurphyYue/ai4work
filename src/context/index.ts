@@ -5,11 +5,15 @@ interface ChatbotUIContext {
   chatSettings: ChatSettings | null,
   setChatSettings: Dispatch<SetStateAction<ChatSettings>>
   chatMessages: ChatMessageContent[],
-  setChatMessages: Dispatch<SetStateAction<ChatMessageContent[]>>
+  setChatMessages: Dispatch<SetStateAction<ChatMessageContent[]>>,
+  runningCode: string,
+  generateCode: Dispatch<SetStateAction<string>>,
 }
 export const ChatbotUIContext = createContext<ChatbotUIContext>({
   chatMessages: [],
   setChatMessages: () => {},
   chatSettings: null,
   setChatSettings: () => {},
+  runningCode: "",
+  generateCode: () => {},
 })

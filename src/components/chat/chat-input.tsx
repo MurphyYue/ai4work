@@ -10,7 +10,7 @@ import { useContext } from "react";
 import { handleHostedChat } from "./chat-helpers";
 
 const ChatInput: React.FC = () => {
-  const { chatMessages, setChatMessages, chatSettings } =
+  const { chatMessages, setChatMessages, chatSettings, generateCode } =
     useContext(ChatbotUIContext);
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -61,14 +61,22 @@ const ChatInput: React.FC = () => {
         setIsGenerating,
         setChatMessages
       );
-      
-      console.log("generatedText", generatedText);
+
+      generateCode(cleanUpCode(generatedText));
+      console.log("generatedText", cleanUpCode(generatedText));
       setIsGenerating(false)
     } catch (error) {
       console.error(error);
       setIsGenerating(false);
       setUserInput(startInput);
     }
+  };
+  const cleanUpCode = (code: string): string => {
+    // replace '```' with empty string
+    // then replace 'jsx' with empty string
+    const lines = code.replace(/```/g, "").replace("jsx", "");
+    return lines;
+;
   };
   return (
     <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">
