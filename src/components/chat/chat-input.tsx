@@ -61,9 +61,8 @@ const ChatInput: React.FC = () => {
         setIsGenerating,
         setChatMessages
       );
-
+      console.log("generatedText", generatedText);
       generateCode(cleanUpCode(generatedText));
-      console.log("generatedText", cleanUpCode(generatedText));
       setIsGenerating(false)
     } catch (error) {
       console.error(error);
@@ -76,7 +75,6 @@ const ChatInput: React.FC = () => {
     // then replace 'jsx' with empty string
     const lines = code.replace(/```/g, "").replace("jsx", "");
     return lines;
-;
   };
   return (
     <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">

@@ -145,7 +145,14 @@ export const fetchChatResponse = async (
 
   return response
 }
-
+const cleanUpCode = (code: string): string => {
+  const lines = code.split('\n');
+  const filteredLines = lines.filter(line => 
+    !line.includes('import React') && 
+    !line.includes('ReactDOM.render')
+  );
+  return filteredLines.join('\n');
+};
 export const processResponse = async (
   response: Response,
   lastChatMessage: ChatMessageContent,
@@ -162,10 +169,7 @@ export const processResponse = async (
       chunk => {
 
         try {
-          contentToAdd = chunk
-          // console.log('isHosted',isHosted)
-          // console.log('contentToAdd',contentToAdd)
-          // fullText += contentToAdd
+          contentToAdd = chunk;
           const lines = contentToAdd.split("data: ");
           const parsedLines = lines
           .filter((line) => line !== "" && !line.includes('[DONE]')) // Remove empty lines and "[DONE]"

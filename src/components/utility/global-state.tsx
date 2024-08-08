@@ -21,7 +21,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessageContent[]>([])
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
     model: "gpt-3.5-turbo",
-    prompt: `You are a helpful AI assistant. You can generate full code for users when they want to create a web page. The output code only based on ReactJs and in one jsx file. Here is the code template ${codeTemplate}. If users didn't clearly speak the web page content, you can use the default content 'Welcome to the live preview' and what users said.Delete the code at the beginning of 'export' and the code at the beginngin of 'import' `,
+    prompt: `You are a helpful AI assistant. You can generate full code for users when they want to create a web page. The output code only based on ReactJs and in one jsx file. Here is the code template ${codeTemplate}. Delete the code at the beginning of 'export' and the code at the beginngin of 'import' `,
     temperature: 0.5,
     contextLength: 4000,
     embeddingsProvider: "openai"
