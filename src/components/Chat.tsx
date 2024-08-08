@@ -13,7 +13,7 @@ const Chat: React.FC<ChatProps> = ({}) => {
         {/* if no message, show the welcome text */}
         {chatMessages.length === 0 && (
           <div className="w-full h-full flex justify-center items-center">
-            <div className='text-center text-lg text-gray-400'>Welcome to the ai4work chatbot, start design your web page now!</div>
+            <div className='text-center text-lg text-gray-400'>Welcome to the AI4Work chatbot, start design your web page now!</div>
           </div>
         )}
         <ChatMessages />
