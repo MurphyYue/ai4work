@@ -27,8 +27,9 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
     embeddingsProvider: "openai"
   })
   const [runningCode, generateCode] = useState<string>(initCode)
+  const [isGenerating, setIsGenerating] = useState<boolean>(false)
   return (
-    <ChatbotUIContext.Provider value={{ chatSettings, setChatSettings, chatMessages, setChatMessages, runningCode, generateCode }}>
+    <ChatbotUIContext.Provider value={{ chatSettings, setChatSettings, chatMessages, setChatMessages, runningCode, generateCode, isGenerating, setIsGenerating }}>
       {children}
     </ChatbotUIContext.Provider>
   )

@@ -10,11 +10,10 @@ import { useContext } from "react";
 import { handleHostedChat } from "./chat-helpers";
 
 const ChatInput: React.FC = () => {
-  const { chatMessages, setChatMessages, chatSettings, generateCode } =
+  const { chatMessages, setChatMessages, chatSettings, generateCode, isGenerating, setIsGenerating } =
     useContext(ChatbotUIContext);
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isTyping && e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
