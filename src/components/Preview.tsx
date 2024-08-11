@@ -5,7 +5,7 @@ import { useContext } from 'react';
 
 interface PreviewProps {}
 
-const Preview: React.FC<PreviewProps> = ({}) => {
+const Preview: React.FC<PreviewProps> = () => {
   const [jsxElement, setJsxElement] = useState<React.ReactElement | null>(null);
   const { runningCode } = useContext(ChatbotUIContext);
   useEffect(() => {
@@ -16,11 +16,10 @@ const Preview: React.FC<PreviewProps> = ({}) => {
       // replace "use strict"; with empty string
       const newstr = transformedCode?.replace(/"use strict";/g, '');
       const Component = new Function('React', 'useState', `${newstr}; return Page;`)(React, React.useState);
-      console.log(Component)
       setJsxElement(<Component />);
     } catch (error) {
       console.error('Error transforming code:', error);
-      setJsxElement(<div>Error rendering component</div>);
+      setJsxElement(<div className='h-full flex text-center items-center text-lg'>Error rendering component</div>);
     }
   }, [runningCode]);
 

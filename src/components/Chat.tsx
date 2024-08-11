@@ -6,7 +6,7 @@ import { useScroll } from './chat/chat-hooks/use-scroll'
 
 interface ChatProps {}
 
-const Chat: React.FC<ChatProps> = ({}) => {
+const Chat: React.FC<ChatProps> = () => {
   const { chatMessages } = useContext(ChatbotUIContext);
   const { messagesEndRef } = useScroll();
   return (
