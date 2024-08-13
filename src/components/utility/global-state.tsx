@@ -6,7 +6,7 @@ import { ChatbotUIContext } from "@/context"
 interface GlobalStateProps {
   children: React.ReactNode
 }
-const codeTemplate = `const Page = () => {return ();}; Don't export the component`;
+const codeTemplate = `const Page = () => {return ();};`;
 
 const initCode = `
 const Page = () => {
@@ -16,6 +16,9 @@ const Page = () => {
     </div>
   );
 };
+
+### Each dom element should has a unique attribute called gen-key and the value should be a random string.
+### you shuld use taillwindcss for styling. 
     `
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessageContent[]>([])

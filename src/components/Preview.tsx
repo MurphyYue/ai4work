@@ -10,6 +10,7 @@ const Preview: React.FC<PreviewProps> = () => {
   const { runningCode } = useContext(ChatbotUIContext);
   useEffect(() => {
     try {
+      console.log('runningCode', runningCode);
       const transformedCode = transform(runningCode, {
         presets: ['react', 'es2015'],
       }).code;

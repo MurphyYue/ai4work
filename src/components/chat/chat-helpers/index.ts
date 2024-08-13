@@ -137,7 +137,7 @@ export const fetchChatResponse = async (
 
     const errorData = await response.json()
 
-    toast.error(errorData.message)
+    toast.error(errorData.error.message)
 
     setIsGenerating(false)
     setChatMessages(prevMessages => prevMessages.slice(0, -2))
