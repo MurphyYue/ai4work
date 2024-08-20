@@ -6,7 +6,13 @@ import { ChatbotUIContext } from "@/context"
 interface GlobalStateProps {
   children: React.ReactNode
 }
-const codeTemplate = `const Page = () => {return ();};`;
+const codeTemplate = `const Page = () => {return ();};
+### The Function name must be 'Page'.
+### Each element has an attribute named 'gen-key' and its value is an unique string.
+### use taillwindcss for styling. 
+### return the code with markdown formatting.
+### If user didn't specify the UI style, use Google Design and dark theme.
+`;
 
 const initCode = `
 const Page = () => {
@@ -15,16 +21,12 @@ const Page = () => {
       AI4Work live preview
     </div>
   );
-};
-
-### Each dom element should has a unique attribute called gen-key and the value should be a random string.
-### you shuld use taillwindcss for styling. 
-    `
+};`
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessageContent[]>([])
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
     model: "gpt-3.5-turbo",
-    prompt: `You are a helpful AI assistant. You can generate full code for users when they want to create a web page. The output code only based on ReactJs and in one jsx file. Here is the code template ${codeTemplate}. Delete the code at the beginning of 'export' and the code at the beginngin of 'import' `,
+    prompt: `You are a frontend developer. Generate a React functional component that displays what the user want to create a web page. Here is the code template ${codeTemplate}.`,
     temperature: 0.5,
     contextLength: 4000,
     embeddingsProvider: "openai"
