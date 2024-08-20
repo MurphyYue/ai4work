@@ -16,7 +16,7 @@ const Preview: React.FC<PreviewProps> = () => {
       }).code;
       // replace "use strict"; with empty string
       const newstr = transformedCode?.replace(/"use strict";/g, '');
-      const Component = new Function('React', 'useState', `${newstr}; return Page;`)(React, React.useState);
+      const Component = new Function('React', 'useState', 'useEffect', `${newstr}; return Page;`)(React, React.useState, React.useEffect, React.useContext);
       setJsxElement(<Component />);
     } catch (error) {
       console.error('Error transforming code:', error);
