@@ -125,7 +125,8 @@ export const fetchChatResponse = async (
   const requestOptions = {
     method: 'POST',
     headers: myHeaders,
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
+    signal: controller.signal
   };
   const response = await fetch(url, requestOptions)
   if (!response.ok) {

@@ -1,33 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { transform } from '@babel/standalone';
 import { ChatbotUIContext } from '@/context';
-import { useContext } from 'react';
+import { LiveProvider, LiveError, LivePreview } from "react-live";
+import { toast, Toaster } from 'sonner';
+
 
 interface PreviewProps {}
 
 const Preview: React.FC<PreviewProps> = () => {
-  const [jsxElement, setJsxElement] = useState<React.ReactElement | null>(null);
+  const [jsxElement, setJsxElement] = useState<string>('null');
   const { runningCode } = useContext(ChatbotUIContext);
   useEffect(() => {
-    try {
-      console.log('runningCode', runningCode);
-      const transformedCode = transform(runningCode, {
-        presets: ['react', 'es2015'],
-      }).code;
-      // replace "use strict"; with empty string
-      const newstr = transformedCode?.replace(/"use strict";/g, '');
-      const Component = new Function('React', 'useState', 'useEffect', `${newstr}; return Page;`)(React, React.useState, React.useEffect, React.useContext);
-      setJsxElement(<Component />);
-    } catch (error) {
-      console.error('Error transforming code:', error);
-      // TODO if the error is from code syntax, use function to fix the error
-      setJsxElement(<div className='h-full flex text-center items-center text-lg'>Error rendering component</div>);
-    }
-  }, [runningCode]);
-
+    console.log('runningCode', runningCode);
+    setJsxElement(runningCode);
+  });
+  const scope = { React, useState, useEffect, useContext, toast, Toaster };
   return (
     <div className="w-full h-full">
-      {jsxElement}
+      <LiveProvider code={ jsxElement } scope={scope} >
+        <LiveError />
+        <LivePreview />
+      </LiveProvider>
     </div>
   );
 };

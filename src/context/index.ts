@@ -7,9 +7,11 @@ interface ChatbotUIContext {
   chatMessages: ChatMessageContent[],
   setChatMessages: Dispatch<SetStateAction<ChatMessageContent[]>>,
   runningCode: string,
-  generateCode: Dispatch<SetStateAction<string>>,
+  setRunningCode: Dispatch<SetStateAction<string>>,
   isGenerating: boolean,
   setIsGenerating: Dispatch<SetStateAction<boolean>>,
+  abortController: AbortController | null
+  setAbortController: Dispatch<SetStateAction<AbortController | null>>
 }
 export const ChatbotUIContext = createContext<ChatbotUIContext>({
   chatMessages: [],
@@ -17,7 +19,9 @@ export const ChatbotUIContext = createContext<ChatbotUIContext>({
   chatSettings: null,
   setChatSettings: () => {},
   runningCode: "",
-  generateCode: () => {},
+  setRunningCode: () => {},
   isGenerating: false,
-  setIsGenerating: () => {}
+  setIsGenerating: () => {},
+  abortController: null,
+  setAbortController: () => {},
 })

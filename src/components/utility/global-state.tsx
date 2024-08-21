@@ -6,7 +6,9 @@ import { ChatbotUIContext } from "@/context"
 interface GlobalStateProps {
   children: React.ReactNode
 }
-const codeTemplate = `const Page = () => {return ();};
+const codeTemplate = `
+() => {return ();};
+
 ### The Function name must be 'Page'.
 ### Each element has an attribute named 'gen-key' and its value is an unique string.
 ### use taillwindcss for styling. 
@@ -15,7 +17,7 @@ const codeTemplate = `const Page = () => {return ();};
 `;
 
 const initCode = `
-const Page = () => {
+() => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-black text-2xl">
       AI4Work live preview
@@ -31,10 +33,11 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
     contextLength: 4000,
     embeddingsProvider: "openai"
   })
-  const [runningCode, generateCode] = useState<string>(initCode)
+  const [runningCode, setRunningCode] = useState<string>(initCode)
   const [isGenerating, setIsGenerating] = useState<boolean>(false)
+  const [abortController, setAbortController] = useState<AbortController | null>(null)
   return (
-    <ChatbotUIContext.Provider value={{ chatSettings, setChatSettings, chatMessages, setChatMessages, runningCode, generateCode, isGenerating, setIsGenerating }}>
+    <ChatbotUIContext.Provider value={{ chatSettings, setChatSettings, chatMessages, setChatMessages, runningCode, setRunningCode, isGenerating, setIsGenerating, abortController, setAbortController }}>
       {children}
     </ChatbotUIContext.Provider>
   )

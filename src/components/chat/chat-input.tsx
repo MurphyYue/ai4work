@@ -10,7 +10,7 @@ import { useContext } from "react";
 import { handleHostedChat } from "./chat-helpers";
 
 const ChatInput: React.FC = () => {
-  const { chatMessages, setChatMessages, chatSettings, generateCode, isGenerating, setIsGenerating } =
+  const { chatMessages, setChatMessages, chatSettings, setRunningCode, isGenerating, setIsGenerating, abortController, setAbortController } =
     useContext(ChatbotUIContext);
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -21,10 +21,10 @@ const ChatInput: React.FC = () => {
     }
   };
 
-  let abortController: AbortController | null = null;
   const handleStopMessage = () => {
     if (abortController) {
       abortController.abort();
+      setIsGenerating(false);
     }
   };
   const handleSendMessage = async (
@@ -36,7 +36,9 @@ const ChatInput: React.FC = () => {
     try {
       setUserInput("");
       setIsGenerating(true);
-      abortController = new AbortController();
+      const newAbortController = new AbortController();
+      setAbortController(newAbortController);
+      console.log("abortController", newAbortController);
       validateChatSettings(messageContent);
       const { tempUserChatMessage, tempAssistantChatMessage } =
         createTempMessages(
@@ -56,12 +58,12 @@ const ChatInput: React.FC = () => {
         payload,
         tempAssistantChatMessage,
         isRegeneration,
-        abortController,
+        newAbortController,
         setIsGenerating,
         setChatMessages
       );
-      console.log("generatedText", generatedText);
-      generateCode(cleanUpCode(generatedText));
+      // !newAbortController?.signal.aborted && console.log("generatedText", cleanUpCode(generatedText));
+      !newAbortController?.signal.aborted && setRunningCode(cleanUpCode(generatedText));
       setIsGenerating(false)
     } catch (error) {
       console.error(error);
@@ -72,6 +74,7 @@ const ChatInput: React.FC = () => {
   const cleanUpCode = (code: string): string => {
     // replace '```' with empty string
     // then replace 'jsx' with empty string
+    // then replace 'const Page = ' with empty string
     // Remove the code before 'const Page'
     // Remove the code after 'export' including 'export'
     const newstr = code?.replace(/```/g, "").replace(/jsx/g, "").replace(/"use strict";/g, "");
@@ -90,8 +93,7 @@ const ChatInput: React.FC = () => {
       }
     }
     let newCode = newLines.join("\n");
-    newCode = newCode.replace(/export/g, "");
-
+    newCode = newCode.replace(/export/g, "").replace(/const Page = /g, "");
     return newCode;
   };
   return (
