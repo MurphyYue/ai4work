@@ -20,6 +20,7 @@ const Preview: React.FC<PreviewProps> = () => {
       setJsxElement(<Component />);
     } catch (error) {
       console.error('Error transforming code:', error);
+      // TODO if the error is from code syntax, use function to fix the error
       setJsxElement(<div className='h-full flex text-center items-center text-lg'>Error rendering component</div>);
     }
   }, [runningCode]);

@@ -26,7 +26,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessageContent[]>([])
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
     model: "gpt-3.5-turbo",
-    prompt: `You are a frontend developer. Generate a React functional component that displays what the user want to create a web page. Here is the code template ${codeTemplate}.`,
+    prompt: `You are a frontend developer. Generate a React functional component that displays what the user want to create a web page. Here is an example ${codeTemplate}.`,
     temperature: 0.5,
     contextLength: 4000,
     embeddingsProvider: "openai"
