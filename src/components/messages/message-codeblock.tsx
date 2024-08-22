@@ -1,16 +1,26 @@
-import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard"
-import { IconCheck, IconCopy, IconDownload } from "@tabler/icons-react"
-import { FC, memo } from "react"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism"
+import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
+import {
+  IconCheck,
+  IconCopy,
+  IconDownload,
+  IconEdit,
+  IconRun,
+} from "@tabler/icons-react";
+import { FC, memo, useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { LiveProvider, LiveEditor } from "react-live";
+import { cleanUpCode } from "@/lib/utils";;
+import { ChatbotUIContext } from "@/context";
+import { useContext } from "react"
 
 interface MessageCodeBlockProps {
-  language: string
-  value: string
+  language: string;
+  value: string;
 }
 
 interface languageMap {
-  [key: string]: string | undefined
+  [key: string]: string | undefined;
 }
 
 export const programmingLanguages: languageMap = {
@@ -36,54 +46,69 @@ export const programmingLanguages: languageMap = {
   shell: ".sh",
   sql: ".sql",
   html: ".html",
-  css: ".css"
-}
+  css: ".css",
+};
 
 export const generateRandomString = (length: number, lowercase = false) => {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXY3456789" // excluding similar looking characters like Z, 2, I, 1, O, 0
-  let result = ""
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXY3456789"; // excluding similar looking characters like Z, 2, I, 1, O, 0
+  let result = "";
   for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  return lowercase ? result.toLowerCase() : result
-}
+  return lowercase ? result.toLowerCase() : result;
+};
 
 export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
   ({ language, value }) => {
-    const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 })
+    const { setRunningCode } = useContext(ChatbotUIContext);
+    const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
 
     const downloadAsFile = () => {
       if (typeof window === "undefined") {
-        return
+        return;
       }
-      const fileExtension = programmingLanguages[language] || ".file"
+      const fileExtension = programmingLanguages[language] || ".file";
       const suggestedFileName = `file-${generateRandomString(
         3,
         true
-      )}${fileExtension}`
-      const fileName = window.prompt("Enter file name" || "", suggestedFileName)
+      )}${fileExtension}`;
+      const fileName = window.prompt(
+        "Enter file name" || "",
+        suggestedFileName
+      );
 
       if (!fileName) {
-        return
+        return;
       }
 
-      const blob = new Blob([value], { type: "text/plain" })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.download = fileName
-      link.href = url
-      link.style.display = "none"
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-    }
+      const blob = new Blob([value], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = fileName;
+      link.href = url;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    };
 
     const onCopy = () => {
-      if (isCopied) return
-      copyToClipboard(value)
-    }
+      if (isCopied) return;
+      copyToClipboard(value);
+    };
 
+    const [editing, setEditing] = useState(false);
+    const [editCodeValue, setEditCodeValue] = useState(value);
+    const editCode = () => {
+      setEditing(true);
+    };
+
+    const runCode = () => {
+      setRunningCode(cleanUpCode(editCodeValue));
+      setEditing(false);
+      // TODO also need to change the code block in the message
+    };
     return (
       <div className="codeblock relative w-full bg-zinc-950 font-sans">
         <div className="flex w-full items-center justify-between bg-zinc-700 px-4 text-white">
@@ -102,29 +127,52 @@ export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
             >
               {isCopied ? <IconCheck size={16} /> : <IconCopy size={16} />}
             </button>
+            {editing ? (
+              <button
+                className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0 "
+                onClick={runCode}
+              >
+                <IconRun size={16} />
+              </button>
+            ) : (
+              <button
+                className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0 "
+                onClick={editCode}
+              >
+                <IconEdit size={16} />
+              </button>
+            )}
           </div>
         </div>
-        <SyntaxHighlighter
-          language={language}
-          style={oneDark}
-          // showLineNumbers
-          customStyle={{
-            margin: 0,
-            width: "100%",
-            background: "transparent"
-          }}
-          codeTagProps={{
-            style: {
-              fontSize: "14px",
-              fontFamily: "var(--font-mono)"
-            }
-          }}
-        >
-          {value}
-        </SyntaxHighlighter>
+        {!editing ? (
+          <SyntaxHighlighter
+            language={language}
+            style={oneDark}
+            // showLineNumbers
+            customStyle={{
+              margin: 0,
+              width: "100%",
+              background: "transparent",
+            }}
+            codeTagProps={{
+              style: {
+                fontSize: "14px",
+                fontFamily: "var(--font-mono)",
+              },
+            }}
+          >
+            {value}
+          </SyntaxHighlighter>
+        ) : (
+          <LiveProvider code={editCodeValue} transformCode={setEditCodeValue}>
+            <div className="w-full">
+              <LiveEditor className="font-mono" />
+            </div>
+          </LiveProvider>
+        )}
       </div>
-    )
+    );
   }
-)
+);
 
-MessageCodeBlock.displayName = "MessageCodeBlock"
+MessageCodeBlock.displayName = "MessageCodeBlock";
