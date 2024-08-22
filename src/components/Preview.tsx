@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { transform } from '@babel/standalone';
 import { ChatbotUIContext } from '@/context';
 import { LiveProvider, LiveError, LivePreview } from "react-live";
 import { toast, Toaster } from 'sonner';
