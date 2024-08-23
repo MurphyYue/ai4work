@@ -146,14 +146,6 @@ export const fetchChatResponse = async (
 
   return response
 }
-const cleanUpCode = (code: string): string => {
-  const lines = code.split('\n');
-  const filteredLines = lines.filter(line => 
-    !line.includes('import React') && 
-    !line.includes('ReactDOM.render')
-  );
-  return filteredLines.join('\n');
-};
 export const processResponse = async (
   response: Response,
   lastChatMessage: ChatMessageContent,

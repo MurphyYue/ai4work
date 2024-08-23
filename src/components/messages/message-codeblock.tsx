@@ -17,6 +17,7 @@ import { useContext } from "react"
 interface MessageCodeBlockProps {
   language: string;
   value: string;
+  id: string;
 }
 
 interface languageMap {
@@ -59,10 +60,9 @@ export const generateRandomString = (length: number, lowercase = false) => {
 };
 
 export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
-  ({ language, value }) => {
-    const { setRunningCode } = useContext(ChatbotUIContext);
+  ({ language, value, id }) => {
+    const { setRunningCode, chatMessages, setChatMessages } = useContext(ChatbotUIContext);
     const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
-
     const downloadAsFile = () => {
       if (typeof window === "undefined") {
         return;
@@ -107,7 +107,12 @@ export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
     const runCode = () => {
       setRunningCode(cleanUpCode(editCodeValue));
       setEditing(false);
-      // TODO also need to change the code block in the message
+      // change the code block in the message
+      chatMessages.forEach((message) => {
+        if (message.message.id === id) {
+          message.message.content = '```jsx\n'+`${editCodeValue.toString()}`+'\n```';
+        }
+      });
     };
     return (
       <div className="codeblock relative w-full bg-zinc-950 font-sans">

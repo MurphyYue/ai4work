@@ -36,7 +36,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
               <div className="text-lg font-semibold">user</div>
             </div>
           )}
-          <MessageMarkdown content={message.content} />
+          <MessageMarkdown content={message.content} id={message.id} />
         </div>
       </div>
     </div>
