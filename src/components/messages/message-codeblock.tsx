@@ -61,7 +61,7 @@ export const generateRandomString = (length: number, lowercase = false) => {
 
 export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
   ({ language, value, id }) => {
-    const { setRunningCode, chatMessages, setChatMessages } = useContext(ChatbotUIContext);
+    const { setRunningCode, chatMessages } = useContext(ChatbotUIContext);
     const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
     const downloadAsFile = () => {
       if (typeof window === "undefined") {

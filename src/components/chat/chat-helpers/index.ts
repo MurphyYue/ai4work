@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { ChatMessageContent } from "@/types/chat-message";
-import { ChatPayload, ChatSettings } from "@/types/chat";
+import { ChatPayload } from "@/types/chat";
 import { consumeReadableStream } from "@/lib/consume-stream";
 import { toast } from "sonner";
 
@@ -155,7 +155,7 @@ export const processResponse = async (
 ) => {
   let fullText = ""
   let contentToAdd = ""
-
+  console.log(isHosted);
   if (response.body) {
     await consumeReadableStream(
       response.body,
