@@ -13,3 +13,8 @@ export interface ChatMessage {
   updated_at: string | null;
   user_id: string;
 }
+
+export interface PayloadMessage {
+  role: string;
+  content: string;
+}

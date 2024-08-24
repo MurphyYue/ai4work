@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import { ChatMessageContent } from "@/types/chat-message";
+import { ChatMessageContent, PayloadMessage } from "@/types/chat-message";
 import { ChatPayload } from "@/types/chat";
 import { consumeReadableStream } from "@/lib/consume-stream";
 import { toast } from "sonner";
 
 import { buildFinalMessages } from "@/lib/build-prompt";
-export const validateChatSettings = (messageContent: String) => {
+export const validateChatSettings = (messageContent: string) => {
   if (!messageContent) {
     throw new Error("Message content not found")
   }
@@ -16,7 +16,7 @@ export const createTempMessages = (
   isRegeneration: boolean,
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessageContent[]>>,
 ) => {
-  let tempUserChatMessage: ChatMessageContent = {
+  const tempUserChatMessage: ChatMessageContent = {
     message: {
       chat_id: "",
       content: messageContent,
@@ -30,7 +30,7 @@ export const createTempMessages = (
     }
   }
 
-  let tempAssistantChatMessage: ChatMessageContent = {
+  const tempAssistantChatMessage: ChatMessageContent = {
     message: {
       chat_id: "",
       content: "",
@@ -74,9 +74,9 @@ export const handleHostedChat = async (
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessageContent[]>>,
 ) => {
 
-  let draftMessages = await buildFinalMessages(payload)
+  const draftMessages = await buildFinalMessages(payload)
 
-  let formattedMessages : any[] = []
+  let formattedMessages: PayloadMessage[] = [];
   formattedMessages = draftMessages
 
   const api = 'https://api2.aigcbest.top/v1/chat/completions'

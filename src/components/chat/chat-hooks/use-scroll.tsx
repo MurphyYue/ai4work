@@ -7,9 +7,9 @@ export const useScroll = () => {
 
   useEffect(() => {
     if (isGenerating) {
-      scrollToBottom()
+      scrollToBottom();
     }
-  }, [chatMessages]);
+  }, [chatMessages, isGenerating]);
 
   const scrollToBottom = () => {
     setTimeout(() => {

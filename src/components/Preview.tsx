@@ -12,7 +12,7 @@ const Preview: React.FC<PreviewProps> = () => {
   useEffect(() => {
     console.log('runningCode', runningCode);
     setJsxElement(runningCode);
-  });
+  }, [runningCode]);
   const scope = { React, useState, useEffect, useContext, toast, Toaster };
   return (
     <div className="w-full h-full">

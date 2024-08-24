@@ -1,5 +1,5 @@
 import { ChatPayload } from "@/types/chat"
-import { ChatMessage } from "@/types/chat-message"
+import { ChatMessage, PayloadMessage } from "@/types/chat-message";
 import { encode } from "gpt-tokenizer"
 
 const buildBasePrompt = (
@@ -28,8 +28,8 @@ export async function buildFinalMessages(
 
   let remainingTokens = CHUNK_SIZE - PROMPT_TOKENS
 
-  let usedTokens = 0
-  usedTokens += PROMPT_TOKENS
+  // let usedTokens = 0
+  // usedTokens += PROMPT_TOKENS
 
   const processedChatMessages = chatMessages.map((chatMessage, index) => {
     const nextChatMessage = chatMessages[index + 1]
@@ -41,7 +41,7 @@ export async function buildFinalMessages(
     return chatMessage
   })
 
-  let finalMessages = []
+  let finalMessages: PayloadMessage[] = [];
 
   for (let i = processedChatMessages.length - 1; i >= 0; i--) {
     const message = processedChatMessages[i].message
@@ -49,14 +49,14 @@ export async function buildFinalMessages(
 
     if (messageTokens <= remainingTokens) {
       remainingTokens -= messageTokens
-      usedTokens += messageTokens
+      // usedTokens += messageTokens
       finalMessages.unshift(message)
     } else {
       break
     }
   }
 
-  let tempSystemMessage: ChatMessage = {
+  const tempSystemMessage: ChatMessage = {
     chat_id: "",
     content: BUILT_PROMPT,
     created_at: "",
@@ -71,14 +71,11 @@ export async function buildFinalMessages(
   finalMessages.unshift(tempSystemMessage)
 
   finalMessages = finalMessages.map(message => {
-    let content
-
-    content = message.content
 
     return {
-      role: message.role,
-      content
-    }
+      content: message.content,
+      role: message.role
+    };
   })
 
   return finalMessages
