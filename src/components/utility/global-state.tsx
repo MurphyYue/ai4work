@@ -36,8 +36,9 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [runningCode, setRunningCode] = useState<string>(initCode)
   const [isGenerating, setIsGenerating] = useState<boolean>(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
+  const [userInput, setUserInput] = useState<string>("")
   return (
-    <ChatbotUIContext.Provider value={{ chatSettings, setChatSettings, chatMessages, setChatMessages, runningCode, setRunningCode, isGenerating, setIsGenerating, abortController, setAbortController }}>
+    <ChatbotUIContext.Provider value={{ chatSettings, setChatSettings, chatMessages, setChatMessages, runningCode, setRunningCode, isGenerating, setIsGenerating, abortController, setAbortController, userInput, setUserInput }}>
       {children}
     </ChatbotUIContext.Provider>
   )

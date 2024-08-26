@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import { IconPlayerStopFilled, IconSend } from "@tabler/icons-react";
 import { TextareaAutosize } from "../ui/textarea-autosize";
-import { cn, cleanUpCode } from "@/lib/utils";
-import { validateChatSettings, createTempMessages } from "./chat-helpers";
-import { ChatMessageContent } from "@/types/chat-message";
-import { ChatPayload } from "@/types/chat";
+import { cn } from "@/lib/utils";
 import { ChatbotUIContext } from "@/context";
 import { useContext } from "react";
-import { handleHostedChat } from "./chat-helpers";
+import { useChatHandler } from './chat-hooks/use-chat-handler';
 
 const ChatInput: React.FC = () => {
-  const { chatMessages, setChatMessages, chatSettings, setRunningCode, isGenerating, setIsGenerating, abortController, setAbortController } =
-    useContext(ChatbotUIContext);
-  const [userInput, setUserInput] = useState("");
+  const { chatMessages, isGenerating, userInput, setUserInput } = useContext(ChatbotUIContext);
+  const { handleSendMessage, handleStopMessage } = useChatHandler();
   const [isTyping, setIsTyping] = useState(false);
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isTyping && e.key === "Enter" && !e.shiftKey) {
@@ -21,56 +17,6 @@ const ChatInput: React.FC = () => {
     }
   };
 
-  const handleStopMessage = () => {
-    if (abortController) {
-      abortController.abort();
-      setIsGenerating(false);
-    }
-  };
-  const handleSendMessage = async (
-    messageContent: string,
-    chatMessages: ChatMessageContent[],
-    isRegeneration: boolean
-  ) => {
-    const startInput = messageContent;
-    try {
-      setUserInput("");
-      setIsGenerating(true);
-      const newAbortController = new AbortController();
-      setAbortController(newAbortController);
-      console.log("abortController", newAbortController);
-      validateChatSettings(messageContent);
-      const { tempUserChatMessage, tempAssistantChatMessage } =
-        createTempMessages(
-          messageContent,
-          chatMessages,
-          isRegeneration, // isRegeneration defalut value
-          setChatMessages
-        );
-      let payload: ChatPayload = {
-        chatSettings: chatSettings!,
-        chatMessages: isRegeneration
-          ? [...chatMessages]
-          : [...chatMessages, tempUserChatMessage],
-      };
-      console.log("payload", payload);
-      const generatedText = await handleHostedChat(
-        payload,
-        tempAssistantChatMessage,
-        isRegeneration,
-        newAbortController,
-        setIsGenerating,
-        setChatMessages
-      );
-      // !newAbortController?.signal.aborted && console.log("generatedText", cleanUpCode(generatedText));
-      !newAbortController?.signal.aborted && setRunningCode(cleanUpCode(generatedText));
-      setIsGenerating(false)
-    } catch (error) {
-      console.error(error);
-      setIsGenerating(false);
-      setUserInput(startInput);
-    }
-  };
   return (
     <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">
       <TextareaAutosize
@@ -99,7 +45,6 @@ const ChatInput: React.FC = () => {
             )}
             onClick={() => {
               if (!userInput) return;
-
               handleSendMessage(userInput, chatMessages, false);
             }}
             size={30}

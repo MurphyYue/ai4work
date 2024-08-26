@@ -12,6 +12,8 @@ interface ChatbotUIContext {
   setIsGenerating: Dispatch<SetStateAction<boolean>>,
   abortController: AbortController | null
   setAbortController: Dispatch<SetStateAction<AbortController | null>>
+  userInput: string
+  setUserInput: Dispatch<SetStateAction<string>>
 }
 export const ChatbotUIContext = createContext<ChatbotUIContext>({
   chatMessages: [],
@@ -24,4 +26,6 @@ export const ChatbotUIContext = createContext<ChatbotUIContext>({
   setIsGenerating: () => {},
   abortController: null,
   setAbortController: () => {},
+  userInput: "",
+  setUserInput: () => {},
 })
