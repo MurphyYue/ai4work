@@ -48,7 +48,7 @@ export const useChatHandler = () => {
         setIsGenerating,
         setChatMessages
       );
-      !newAbortController?.signal.aborted && setRunningCode(cleanUpCode(generatedText));
+      !newAbortController?.signal.aborted && cleanUpCode(generatedText) && setRunningCode(cleanUpCode(generatedText));
       setIsGenerating(false)
     } catch (error) {
       console.error(error);

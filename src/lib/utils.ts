@@ -27,6 +27,7 @@ export const cleanUpCode = (code: string): string => {
     }
   }
   let newCode = newLines.join("\n");
-  newCode = newCode.replace(/export/g, "").replace(/function Component() { /g, "() => {");
+  // replace "function Component() {" to "() => {";
+  newCode = newCode.replace("function Component() {", "() => {").replace(/export/g, "");
   return newCode;
 };
