@@ -13,6 +13,7 @@ import { LiveProvider, LiveEditor } from "react-live";
 import { cleanUpCode } from "@/lib/utils";;
 import { ChatbotUIContext } from "@/context";
 import { useContext } from "react"
+import { Button } from "@/components/ui/button"
 
 interface MessageCodeBlockProps {
   language: string;
@@ -119,33 +120,33 @@ export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
         <div className="flex w-full items-center justify-between bg-zinc-700 px-4 text-white">
           <span className="text-xs lowercase">{language}</span>
           <div className="flex items-center space-x-1">
-            <button
+            <Button
               className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0 "
               onClick={downloadAsFile}
             >
               <IconDownload size={16} />
-            </button>
+            </Button>
 
-            <button
+            <Button
               className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
               onClick={onCopy}
             >
               {isCopied ? <IconCheck size={16} /> : <IconCopy size={16} />}
-            </button>
+            </Button>
             {editing ? (
-              <button
+              <Button
                 className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0 "
                 onClick={runCode}
               >
                 <IconRun size={16} />
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0 "
                 onClick={editCode}
               >
                 <IconEdit size={16} />
-              </button>
+              </Button>
             )}
           </div>
         </div>

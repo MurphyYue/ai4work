@@ -25,9 +25,10 @@ export const useChatHandler = () => {
       const newAbortController = new AbortController();
       setAbortController(newAbortController);
       !isRegeneration && validateChatSettings(messageContent);
+      const newMessageContent = chatMessages.length !== 0 ? messageContent : messageContent + ' and use "Component" as the function name.';
       const { tempUserChatMessage, tempAssistantChatMessage } =
         createTempMessages(
-          messageContent,
+          newMessageContent,
           chatMessages,
           isRegeneration, // isRegeneration defalut value
           setChatMessages
@@ -58,7 +59,15 @@ export const useChatHandler = () => {
   const resendMessage = async (
     chatMessages: ChatMessageContent[],
   ) => {
-    handleSendMessage('', chatMessages, true);
+    const len = chatMessages.length;
+    const newChatMessages: ChatMessageContent[] = chatMessages.map((messageItem ,index) => {
+      if (index === len - 2) {
+        const newContent = messageItem.message.content;
+        messageItem.message.content = newContent + ' and use "Component" as the function name.';
+      }
+      return messageItem;
+    });
+    handleSendMessage('', newChatMessages, true);
   }
   return {
     handleSendMessage,
