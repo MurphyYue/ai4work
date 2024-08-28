@@ -62,3 +62,19 @@
 4.	Personal Websites:
 
 	•	A user who wants to create a personal portfolio site describes the sections they need (e.g., “A header with my name, a gallery of my projects, and a contact form”). The tool generates the structure, and the user can further customize it as needed.
+
+### flow graph
+
+```mermaid
+graph TD
+    A[User Chats with AI] --> B[AI Generates React Code]
+    B --> C{Is Code Generation Successful?}
+    C -->|Yes| D[Render Code in Preview Area]
+    C -->|No| E[User click regenerate button for regeneration]
+    D --> F{Does User Edit the Code?}
+    F -->|Yes| G[User Edits the Code]
+    G --> H[User Clicks Run Button]
+    H --> I[Update Preview Area]
+    F -->|No| J[User Continues Chatting with AI]
+    J --> B
+    I --> J
